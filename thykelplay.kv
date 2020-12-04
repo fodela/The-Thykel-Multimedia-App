@@ -1,0 +1,88 @@
+
+ScreenManager:
+    id: screenmanager
+    name: 'sm'
+    HomeScreen:
+        id: home
+        name: 'home'
+    PictureScreen:
+        id: pictures
+        name: 'pictures'
+    MusicScreen:
+        id: music
+        name: 'music'
+    VideoScreen:
+        id: video
+        name: 'video'
+            
+<HomeScreen>:
+    FloatLayout: 
+        # (252/255, 3/255, 227/255)
+        canvas.before:
+            Color: 
+                rgb: (0, 0, 0)
+            Rectangle:
+                size: self.size
+                pos: self.pos
+    
+
+
+    # canvas:
+    #     Rectangle:
+    #         size: slf.size
+    #         pos: self.pos
+    #         source: 'images/image.jpg'
+    # canvas:
+    #     Rectangle:
+    #         size: 180,130
+    #         source: 'images/music.jpg'
+
+        MDToolbar:
+            title: 'Thykel-Play'
+            font_size: 40
+            pos_hint: {'top':1}
+            md_bg_color: 0,0,0,1
+            specific_text_color: 252/255, 3/255, 227/255,1
+            anchor_title: 'center'
+    
+        #Buttons
+        MDRaisedButton:
+            md_bg_color: (252/255, 3/255, 227/255,1)
+            text: "Find Media"
+            pos_hint: {'top':.4,'center_x':.5 }
+            on_release: app.choose_file()
+
+        # MDRaisedButton:
+        #     md_bg_color: (252/255, 3/255, 227/255,1)
+        #     text: "Play Music"
+        #     pos_hint: {'top':.4,'center_x':.5 }
+
+        # MDRaisedButton:
+        #     md_bg_color: (252/255, 3/255, 227/255,1)
+        #     text: "Watch Movies"
+        #     pos_hint: {'top':.4,'center_x':.8 }
+
+<VideoScreen>:
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: 0,0,1
+            Rectangle:
+                pos: self.pos
+                size: self.size
+        MDToolbar:
+            left_action_items: [['arrow-left',lambda x : app.change_screen('home')]]
+            title: 'Playing video'
+            md_bg_color: 0,0,0,1
+            specific_text_color: (252/255, 3/255, 227/255,1)
+            pos_hint: {'top':1}
+            user_font_size: '40sp'
+
+        VideoPlayer:
+            pos_hint: {'top':.98}
+            size:1,.8
+            volume: 1
+            source: app.video_name
+            state: 'play'
+            attr: 'VideoPlayer.allow_fullscreen'
+            options:{'allow_stretch': True}
