@@ -42,23 +42,34 @@ ScreenManager:
             font_size: 40
             pos_hint: {'top':1}
             md_bg_color: 0,0,0,1
-            specific_text_color: 252/255, 3/255, 227/255,1
+            specific_text_color: app.color_primary            
             anchor_title: 'center'
     
         #Buttons
         MDRaisedButton:
-            md_bg_color: (252/255, 3/255, 227/255,1)
-            text: "Find Media"
-            pos_hint: {'top':.4,'center_x':.5 }
+            md_bg_color: app.color_primary
+            text: "Image Viewer"
+            pos_hint: {'top':.4,'center_x':.2 }
             on_release: app.choose_file()
+        MDRaisedButton:
+            md_bg_color: app.color_primary
+            text: "Music Player"
+            pos_hint: {'top':.4,'center_x':.5 }
+            on_release: app.play_music()
+        MDRaisedButton:
+            md_bg_color: app.color_primary
+            text: "Video Player"
+            pos_hint: {'top':.4,'center_x':.8 }
+            # on_release: app.choose_file()
+        
 
         # MDRaisedButton:
-        #     md_bg_color: (252/255, 3/255, 227/255,1)
+        #     md_bg_color: app.color_primary
         #     text: "Play Music"
         #     pos_hint: {'top':.4,'center_x':.5 }
 
         # MDRaisedButton:
-        #     md_bg_color: (252/255, 3/255, 227/255,1)
+        #     md_bg_color: app.color_primary
         #     text: "Watch Movies"
         #     pos_hint: {'top':.4,'center_x':.8 }
 
@@ -74,7 +85,7 @@ ScreenManager:
             left_action_items: [['arrow-left',lambda x : app.change_screen('home')]]
             title: 'Playing video'
             md_bg_color: 0,0,0,1
-            specific_text_color: (252/255, 3/255, 227/255,1)
+            specific_text_color: app.color_primary
             pos_hint: {'top':1}
             user_font_size: '40sp'
 
@@ -85,4 +96,14 @@ ScreenManager:
             source: app.video_name
             state: 'play'
             attr: 'VideoPlayer.allow_fullscreen'
-            options:{'allow_stretch': True}
+            allow_stretch: True
+
+<MusicScreen>:
+    name: 'music'
+    FloatLayout:
+        canvas:
+            Color:
+                rgb: 0,0,0
+            Rectangle:
+                pos: self.pos
+                size: self.size
