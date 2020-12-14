@@ -27,6 +27,7 @@ class ThykelPlay(MDApp):
     left_to_play = StringProperty('0')
     play_length = NumericProperty(0)
     color_black =ListProperty((0,0,0,1))
+    color_white =ListProperty((1,1,1,1))
     color_primary =ListProperty((1,0,1,1))
     sound = ObjectProperty(SoundLoader.load('music.m4a'))
 
