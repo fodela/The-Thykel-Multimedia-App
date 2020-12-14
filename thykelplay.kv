@@ -5,9 +5,9 @@ ScreenManager:
     HomeScreen:
         id: home
         name: 'home'
-    PictureScreen:
-        id: pictures
-        name: 'pictures'
+    ImageScreen:
+        id: image
+        name: 'image'
     MusicScreen:
         id: music
         name: 'music'
@@ -17,7 +17,6 @@ ScreenManager:
             
 <HomeScreen>:
     FloatLayout: 
-        # (252/255, 3/255, 227/255)
         canvas.before:
             Color: 
                 rgb: (0, 0, 0)
@@ -37,20 +36,15 @@ ScreenManager:
     #         size: 180,130
     #         source: 'images/music.jpg'
 
-        MDToolbar:
+        MyToolbar:
             title: 'Thykel-Play'
-            font_size: 40
-            pos_hint: {'top':1}
-            md_bg_color: 0,0,0,1
-            specific_text_color: app.color_primary            
-            anchor_title: 'center'
-    
+            left_action_items: [['menu',lambda x : x]]
         #Buttons
         MDRaisedButton:
             md_bg_color: app.color_primary
             text: "Image Viewer"
             pos_hint: {'top':.4,'center_x':.2 }
-            # on_release: app.choose_file()
+            on_release: app.view_image()
         MDRaisedButton:
             md_bg_color: app.color_primary
             text: "Music Player"
@@ -60,51 +54,129 @@ ScreenManager:
             md_bg_color: app.color_primary
             text: "Video Player"
             pos_hint: {'top':.4,'center_x':.8 }
-            on_release: app.choose_file()
+            on_release: app.play_video()
+
+        # FileChooserListView:
+        #     id:chooser
+        #     path: '/home/fodela/Downloads/'
         
 
 
 <VideoScreen>:
     FloatLayout:
-        canvas:
-            Color:
-                rgb: 0,0,1
-            Rectangle:
-                pos: self.pos
-                size: self.size
-        MDToolbar:
-            left_action_items: [['arrow-left',lambda x : app.change_screen('home')]]
-            title: 'Playing video'
-            md_bg_color: 0,0,0,1
-            specific_text_color: app.color_primary
-            pos_hint: {'top':1}
-            user_font_size: '40sp'
-
+        # canvas:
+        #     Color:
+        #         rgb: 0,0,1
+        #     Rectangle:
+        #         pos: self.pos
+        #         size: self.size
+        MyToolbar:
+            title: app.media_playing
         VideoPlayer:
+            id: vid
             pos_hint: {'top':.98}
             size:1,.8
             volume: 1
-            source: app.video_name
+            source: app.media_name
             state: 'play'
             attr: 'VideoPlayer.allow_fullscreen'
             allow_stretch: True
+            options: {'allow_stretch':True, }
+            # image_play: 'images/play'
+            # image_pause: 'images/pause'
+            # image_stop:
+            # image_volume_muted:
 
 <MusicScreen>:
     name: 'music'
     FloatLayout:
-        canvas:
-            Color:
-                rgb: 0,0,0
-            Rectangle:
-                pos: self.pos
-                size: self.size
+        # canvas:
+        #     Color:
+        #         rgb: 0,0,0
+        #     Rectangle:
+        #         pos: self.pos
+        #         size: self.size
+    # MediaControl:
+    BoxLayout:
+        pos_hint: {'top':1.1,'center_x':.5 }
+        MDLabel:
+            text: app.played
+            color: app.color_primary
+            size_hint: None,None
+            pos_hint: {'center_x': 1.5 }
+        MDSlider:
+            id: seeker
+            min: 0
+            max: app.play_length
+            value: 0
+            color: app.color_primary
+            hint_text_color: app.color_primary
+            size_hint: .7,None
+            # pos_hint: {'top':.2,'center_x':.5 }
+            # on_touch_up: app.sound.seek(self.value)
+        
+        MDLabel:
+            text: app.left_to_play
+            color: app.color_primary
+            size_hint: None,None
+            # pos_hint: {'top':.2,'center_x':.93}
+    MyToolbar:
+        title: app.media_playing
+        left_action_items: [['arrow-left',lambda x : app.music_go_home()]]
+    MDSlider:
+        id: vol
+        min: 0
+        max: 100
+        value: 50
+        orientation: 'vertical'
+        color: app.color_primary
+        hint_text_color: app.color_primary
+        size_hint: None,.5
+        pos_hint: {'center_y':.5,'center_x':.9}
+        on_active: app.sound.volume = self.value/100
+        value_track: True
+        value_track_color: app.color_primary
 
-<PictureScreen>:
+<ImageScreen>:
     name: 'picture'
     FloatLayout:
         canvas:
             Color:
-                rgb: 0,0,0
+                rgba: 0,0,0,1
             Rectangle:
                 pos: self.pos
                 size: self.size
+        MyToolbar:
+            title: app.media_playing
+        Carousel:
+            Image:
+                source: app.media_name
+                pos_hint: {'center_x': .5,'center_y':.5}
+                size: self.texture_size
+                size_hint: .9,.9
+            Image:
+                source: '/home/fodela/Downloads/Images/nat1.jpg'
+                pos_hint: {'center_x': .5,'center_y':.5}
+                size: self.texture_size
+                size_hint: .9,.9
+            Image:
+                source: '/home/fodela/Downloads/Images/nat2.jpg'
+                pos_hint: {'center_x': .5,'center_y':.5}
+                size: self.texture_size
+                size_hint: .9,.9
+        MDIconButton:
+            icon: 'less-than'
+            # pos_hint: {'left':1, }
+
+        MDIconButton:
+            icon: 'greater-than'
+            pos_hint: {'right':1, }
+
+<MyToolbar@MDToolbar>:
+    left_action_items: [['arrow-left', lambda x : app.change_screen('home')]]
+    title: ''
+    md_bg_color: 0,0,0,1
+    specific_text_color: app.color_primary
+    pos_hint: {'top':1}
+    user_font_size: '40sp'
+
