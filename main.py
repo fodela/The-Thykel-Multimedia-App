@@ -4,6 +4,7 @@ from plyer import filechooser
 from kivy.properties import StringProperty,ListProperty,ObjectProperty,NumericProperty
 from kivy.core.audio import SoundLoader
 from kivymd.uix.toolbar import MDToolbar
+from kivymd.uix.button import MDIconButton
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.clock import Clock
 
@@ -17,6 +18,8 @@ class VideoScreen(Screen):
     pass
 class MyToolbar(MDToolbar):
     pass
+class MusicButton(MDIconButton):
+    pass
 
 
 class ThykelPlay(MDApp):
@@ -24,6 +27,7 @@ class ThykelPlay(MDApp):
     prev_dir = StringProperty('home/fodela/')
     media_playing = StringProperty()
     played = StringProperty('0')
+    player_state_icon = StringProperty('pause')
     left_to_play = StringProperty('0')
     play_length = NumericProperty(0)
     color_black =ListProperty((0,0,0,1))
@@ -71,24 +75,40 @@ class ThykelPlay(MDApp):
         self.sm.current = screen_name
 
     def play_music(self):
-        self.prev_dir = '/home/fodela/Music/'
-        self.choose_file()
-        self.sound = SoundLoader.load(self.media_name)
-        if self.sound:
-            self.sound.volume = self.music_page.ids.vol.value
-            self.change_screen('music')
-            self.left_to_play = str(round(self.sound.length//60))+':'+str(round(self.sound.length%60))
-            self.play_length = self.sound.length
-            self.sound.play()
-            self.played = str(self.sound.get_pos())
-            self.music_page.ids.seeker.value = self.sound.get_pos()
+        try:
+            self.prev_dir = '/home/fodela/Music/'
+            self.choose_file()
+            self.sound = SoundLoader.load(self.media_name)
+            if self.sound:
+                self.sound.volume = self.music_page.ids.vol.value
+                self.change_screen('music')
+                self.left_to_play = str(round(self.sound.length//60))+':'+str(round(self.sound.length%60))
+                self.play_length = self.sound.length
+                self.sound.play()
+                self.played = str(self.sound.get_pos())
+                self.music_page.ids.seeker.value = self.sound.get_pos()
 
-            # def update_music_ui(self,**kwargs):
-            #     self.left_to_play = str(round(self.sound.length//60))+':'+str(round(self.sound.length%60))
-            #     self.play_length = self.sound.length
-            #     self.played = str(self.sound.get_pos())
-            # Clock.schedule_interval(update_music_ui(ThykelPlay()),1)
-       
+                # def update_music_ui(self,**kwargs):
+                #     self.left_to_play = str(round(self.sound.length//60))+':'+str(round(self.sound.length%60))
+                #     self.play_length = self.sound.length
+                #     self.played = str(self.sound.get_pos())
+                # Clock.schedule_interval(update_music_ui(ThykelPlay()),1)
+        except Exception as e:
+            print(e)
+
+    def music_pause_n_play(self):
+        if self.player_state_icon == 'pause':
+            self.sound.pause()
+            self.player_state_icon = 'play'
+        elif self.player_state_icon == 'play':
+            self.sound.play()
+            self.player_state_icon = 'pause'
+
+    def music_stop(self):
+        self.sound.stop()
+        self.player_state_icon = 'play'
+        
+
     def play_video(self):
         self.prev_dir = '/home/fodela/Downloads/Video/'
         self.choose_file()
@@ -103,7 +123,8 @@ class ThykelPlay(MDApp):
         self.sound.stop()
         self.change_screen('home')
 
-    # def update_music_ui(self):
+    # def update_music_ui(self,*args):
+    #     self.music_ui = Clock.schedule_interval()
     #     self.left_to_play = str(round(self.sound.length//60))+':'+str(round(self.sound.length%60))
     #     self.played = str(self.sound.get_pos())
     
