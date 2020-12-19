@@ -1,3 +1,4 @@
+#: import TwoLineIconListItem kivymd.uix.list.TwoLineIconListItem
 ScreenManager:
     id: screenmanager
     name: 'sm'
@@ -104,7 +105,7 @@ ScreenManager:
             size: 500, 500
             # allow_stretch: True
             # anim_delay: -1
-            anim_loop: app.sound.length/2
+            anim_loop:( (app.sound.length - root.ids.seeker.value)/2)
             size_hint: .3,.3
             pos_hint: {'top':.76,'center_x':.3 }
         MDLabel:
@@ -130,6 +131,8 @@ ScreenManager:
             pos_hint: {'top':.76,'center_x':.8}
             MDList:
                 id: recents
+                on_parent:
+                    for r in app.recently_played:txt=f"r.split('/')[-1][:-4]";self.add_widget(TwoLineIconListItem(text=txt,))
                 
                 TwoLineIconListItem:
                     text: 'recent'
@@ -142,52 +145,7 @@ ScreenManager:
                         icon: 'play'
                         theme_text_color: "Custom"
                         text_color: app.color_white
-                TwoLineIconListItem:
-                    text: 'recent'
-                    secondary_text: 'Scholaurenstein'
-                    theme_text_color: 'Custom'
-                    text_color: app.color_primary
-                    secondary_theme_text_color: 'Custom'
-                    secondary_text_color: app.color_white_transparent
-                    IconLeftWidget:
-                        icon: 'play'
-                        theme_text_color: "Custom"
-                        text_color: app.color_white
-                TwoLineIconListItem:
-                    text: 'recent'
-                    secondary_text: 'Scholaurenstein'
-                    theme_text_color: 'Custom'
-                    text_color: app.color_primary
-                    secondary_theme_text_color: 'Custom'
-                    secondary_text_color: app.color_white_transparent
-                    IconLeftWidget:
-                        icon: 'play'
-                        theme_text_color: "Custom"
-                        text_color: app.color_white
-
-                TwoLineIconListItem:
-                    text: 'recent'
-                    secondary_text: 'Scholaurenstein'
-                    theme_text_color: 'Custom'
-                    text_color: app.color_primary
-                    secondary_theme_text_color: 'Custom'
-                    secondary_text_color: app.color_white_transparent
-                    IconLeftWidget:
-                        icon: 'play'
-                        theme_text_color: "Custom"
-                        text_color: app.color_white
-
-                TwoLineIconListItem:
-                    text: 'recent'
-                    secondary_text: 'Scholaurenstein'
-                    theme_text_color: 'Custom'
-                    text_color: app.color_primary
-                    secondary_theme_text_color: 'Custom'
-                    secondary_text_color: app.color_white_transparent
-                    IconLeftWidget:
-                        icon: 'play'
-                        theme_text_color: "Custom"
-                        text_color: app.color_white
+                
         BoxLayout:
             size_hint:1,None
             pos_hint: {'top':.2,'center_x':.5 }

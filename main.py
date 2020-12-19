@@ -7,6 +7,7 @@ from kivymd.uix.toolbar import MDToolbar
 from kivymd.uix.button import MDIconButton
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.clock import Clock
+from kivymd.uix.list import TwoLineIconListItem,IconLeftWidget
 import os
 
 
@@ -39,6 +40,9 @@ class ThykelPlay(MDApp):
     color_white_transparent = ListProperty((1,1,1,.5))
     color_primary =ListProperty((1,0,1,1))
     sound = ObjectProperty(SoundLoader.load('music.m4a'))
+    recently_played = ListProperty()
+    recent_set = ObjectProperty()
+    recent_set = set()
 
     def build(self):
         self.sm = ScreenManager()
@@ -91,6 +95,9 @@ class ThykelPlay(MDApp):
                 self.play_length = self.sound.length
                 self.sound.play()
                 self.played = str(self.sound.get_pos())
+                self.recent_set.add(self.media_name)
+                self.recently_played = [i for i in self.recent_set]
+
 
                 Clock.schedule_interval(self.update_music_ui,1)
                 
@@ -140,10 +147,29 @@ class ThykelPlay(MDApp):
         self.played = f"{int(self.sound.get_pos()//60)}:{int(self.sound.get_pos()%60)}"
 
     def get_files(self,dir):
-        fileNames = os.listdir('/home/fodela/Downloads/Images/')
-        for fileName in fileNames:
-            print(fileName)
+        # fileNames = os.listdir('/home/fodela/Downloads/Images/')
+        # for fileName in fileNames:
+        #     print(fileName)
             # print(os.path.abspath(os.path.join(dir,fileName)))
+    
+        try:
+            for r in self.recently_played:
+                self.music_page.ids.recents.add_widget(TwoLineIconListItem(text = r.split('/')[-1][:-4],
+                secondary_text= 'Scholaurenstein',
+                theme_text_color= 'Custom',
+                text_color= self.color_primary,
+                secondary_theme_text_color= 'Custom',
+                secondary_text_color= self.color_white_transparent,
+                # IconLeftWidget=
+                #         {'icon': 'play',
+                #         'theme_text_color': "Custom",
+                #         'text_color': self.color_white}
+                ))
+            #     print(r.split('/')[-1][:-4])
+            # print(self.music_page.ids.recents)
+            # print('tee')
+        except Exception as e:
+            print(e)
     
 if __name__ == "__main__":
     ThykelPlay().run()
