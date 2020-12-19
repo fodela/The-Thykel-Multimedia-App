@@ -235,29 +235,22 @@ ScreenManager:
             anchor: 'center'
             left_action_items: [['arrow-left', lambda x : app.change_screen('home')]]
 
-        Carousel:
-            Image:
-                source: app.media_name
-                pos_hint: {'center_x': .5,'center_y':.5}
-                size: self.texture_size
-                size_hint: .9,.9
-            Image:
-                source: '/home/fodela/Downloads/Images/nat1.jpg'
-                pos_hint: {'center_x': .5,'center_y':.5}
-                size: self.texture_size
-                size_hint: .9,.9
-            Image:
-                source: '/home/fodela/Downloads/Images/nat2.jpg'
-                pos_hint: {'center_x': .5,'center_y':.5}
-                size: self.texture_size
-                size_hint: .9,.9
-        MDIconButton:
+        
+        AsyncImage:
+            id: img
+            source: app.current_img
+            pos_hint: {'center_x': .5,'center_y':.5}
+            size: self.texture_size
+            size_hint: .85,.85
+            
+        MusicButton:
             icon: 'less-than'
-            # pos_hint: {'left':1, }
+            pos_hint: {'left':.95,'center_y':.5 }
 
-        MDIconButton:
+        MusicButton:
             icon: 'greater-than'
-            pos_hint: {'right':1, }
+            pos_hint: {'right':1, 'center_y':.5}
+            on_release: app.next_img()
 
 <MyToolbar@MDToolbar>:
     title: ''

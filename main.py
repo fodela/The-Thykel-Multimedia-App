@@ -8,6 +8,7 @@ from kivymd.uix.button import MDIconButton
 from kivy.uix.filechooser import FileChooserIconView
 from kivy.clock import Clock
 from kivymd.uix.list import TwoLineIconListItem,IconLeftWidget
+from kivy.uix.image import Image
 import os
 
 
@@ -43,6 +44,9 @@ class ThykelPlay(MDApp):
     recently_played = ListProperty()
     recent_set = ObjectProperty()
     recent_set = set()
+    pic_index = NumericProperty(0)
+    image_lst = ListProperty()
+    current_img = StringProperty()
 
     def build(self):
         self.sm = ScreenManager()
@@ -78,7 +82,6 @@ class ThykelPlay(MDApp):
         self.media_name = selection[0]
         self.media_playing = self.media_name.split('/')[-1]
         self.prev_dir = '/'.join(self.media_name.split('/')[:-1])
-        print(self.prev_dir)
             
     def change_screen(self,screen_name):
         self.sm.current = screen_name
@@ -135,8 +138,8 @@ class ThykelPlay(MDApp):
     def view_image(self):
         self.prev_dir = '/home/fodela/Downloads/Images/'
         self.choose_file()
+        self.current_img = self.media_name
         self.change_screen('image')
-        # self.get_files(self.prev_dir)
 
     def music_go_home(self):
         self.sound.stop()
@@ -165,11 +168,24 @@ class ThykelPlay(MDApp):
                 #         'theme_text_color': "Custom",
                 #         'text_color': self.color_white}
                 ))
-            #     print(r.split('/')[-1][:-4])
-            # print(self.music_page.ids.recents)
-            # print('tee')
+            
         except Exception as e:
             print(e)
-    
+    def get_imgs(self):
+        fileNames = os.listdir(self.prev_dir)
+        self.image_lst = [f"{self.prev_dir}/{f} " for f in fileNames]
+        print(len(self.image_lst))
+
+    def next_img(self):
+        try:
+            print(self.current_img)
+            self.get_imgs()
+            if self.pic_index < len(self.image_lst):
+                self.current_img = str(self.image_lst[self.pic_index])
+                self.pic_index +=1
+                print('fired')
+        except Exception as err:
+            print(err)
+        
 if __name__ == "__main__":
     ThykelPlay().run()
