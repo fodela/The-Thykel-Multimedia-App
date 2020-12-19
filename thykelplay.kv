@@ -88,10 +88,36 @@ ScreenManager:
                 pos: self.pos
                 size: self.size
     # MediaControl:
+        # Button:
+        #     text: ""
+        #     on_press: gif.anim_delay = 0.10
+        #     on_press: gif._coreimage.anim_reset(True)
+        Label:
+            text: 'Now Playing'
+            pos_hint: {'top':1.3,'right':.8}
+            font_size: 20
+            
+        Image:
+            id: gif
+            source: 'images/music.gif'
+            # center: self.parent.center
+            size: 500, 500
+            # allow_stretch: True
+            # anim_delay: -1
+            anim_loop: app.sound.length/2
+            size_hint: .3,.3
+            pos_hint: {'top':.76,'center_x':.3 }
+        MDLabel:
+            text: app.media_playing
+            pos_hint: {'top':.9}
+            font_size: 20
+            color:240/255, 185/255, 240/255,1
+            size_hint_x: .6
+            padding: (30,0)
         Label:
             text: 'Recently Played'
             pos_hint: {'top':1.3,'right':1.3}
-            font_size: 25
+            font_size: 20
         
         ScrollView:
             canvas.before:
