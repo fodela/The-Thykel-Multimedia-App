@@ -88,59 +88,154 @@ ScreenManager:
                 pos: self.pos
                 size: self.size
     # MediaControl:
-    BoxLayout:
-        pos_hint: {'top':1.1,'center_x':.5 }
-        MDLabel:
-            text: app.played
-            color: app.color_primary
-            size_hint: None,None
-            padding: (30,0)
-        Slider:
-            id: seeker
-            min: 0
-            max: app.play_length
-            color: 0,1,0,1
-            value: 0
-            value_track:True
-            value_track_color:1,0,1,1
-            hint_text_color: app.color_primary
-            size_hint: .7,None
-            on_touch_up:if self.collide_point(*args[1].pos):  app.sound.seek(self.value)
+        Label:
+            text: 'Recently Played'
+            pos_hint: {'top':1.3,'right':1.3}
+            font_size: 25
         
-        MDLabel:
-            text: app.left_to_play
-            color: app.color_primary
-            size_hint: None,None
-            # pos_hint: {'top':.2,'center_x':.93}
-    MyToolbar:
-        title: app.media_playing
-        left_action_items: [['arrow-left',lambda x : app.music_go_home()]]
-    MDSlider:
-        id: vol
-        min: 0
-        max: 100
-        value: 50
-        orientation: 'vertical'
-        color: app.theme_cls.accent_color
-        hint_text_color: app.color_primary
-        size_hint: None,.45
-        pos_hint: {'center_y':.5,'center_x':.9}
-        on_touch_up: if self.collide_point(*args[1].pos): app.sound.volume = self.value/100
-        value_track: True
-        value_track_color: app.color_primary
-    BoxLayout:
-        pos_hint: {'top':.25,'center_x':.45 }
-        size_hint:None,None
-        MusicButton:
-            icon: 'skip-backward'
-        MusicButton:
-            icon: 'stop'
-            on_release: app.music_stop()
-        MusicButton:
-            icon: app.player_state_icon
-            on_press:if self.collide_point(*args[0].pos): app.music_pause_play_n_stop()
-        MusicButton:
-            icon: 'skip-forward'
+        ScrollView:
+            canvas.before:
+                Color:
+                    rgb: .1,.1,.1,1
+                Rectangle:
+                    pos: self.pos
+                    size: self.size
+            size_hint: .3,.5
+            pos_hint: {'top':.76,'center_x':.8}
+            MDList:
+                id: recents
+                
+                TwoLineIconListItem:
+                    text: 'recent'
+                    secondary_text: 'Scholaurenstein'
+                    theme_text_color: 'Custom'
+                    text_color: app.color_primary
+                    secondary_theme_text_color: 'Custom'
+                    secondary_text_color: app.color_white_transparent
+                    IconLeftWidget:
+                        icon: 'play'
+                        theme_text_color: "Custom"
+                        text_color: app.color_white
+                TwoLineIconListItem:
+                    text: 'recent'
+                    secondary_text: 'Scholaurenstein'
+                    theme_text_color: 'Custom'
+                    text_color: app.color_primary
+                    secondary_theme_text_color: 'Custom'
+                    secondary_text_color: app.color_white_transparent
+                    IconLeftWidget:
+                        icon: 'play'
+                        theme_text_color: "Custom"
+                        text_color: app.color_white
+                TwoLineIconListItem:
+                    text: 'recent'
+                    secondary_text: 'Scholaurenstein'
+                    theme_text_color: 'Custom'
+                    text_color: app.color_primary
+                    secondary_theme_text_color: 'Custom'
+                    secondary_text_color: app.color_white_transparent
+                    IconLeftWidget:
+                        icon: 'play'
+                        theme_text_color: "Custom"
+                        text_color: app.color_white
+
+                TwoLineIconListItem:
+                    text: 'recent'
+                    secondary_text: 'Scholaurenstein'
+                    theme_text_color: 'Custom'
+                    text_color: app.color_primary
+                    secondary_theme_text_color: 'Custom'
+                    secondary_text_color: app.color_white_transparent
+                    IconLeftWidget:
+                        icon: 'play'
+                        theme_text_color: "Custom"
+                        text_color: app.color_white
+
+                TwoLineIconListItem:
+                    text: 'recent'
+                    secondary_text: 'Scholaurenstein'
+                    theme_text_color: 'Custom'
+                    text_color: app.color_primary
+                    secondary_theme_text_color: 'Custom'
+                    secondary_text_color: app.color_white_transparent
+                    IconLeftWidget:
+                        icon: 'play'
+                        theme_text_color: "Custom"
+                        text_color: app.color_white
+        BoxLayout:
+            size_hint:1,None
+            pos_hint: {'top':.2,'center_x':.5 }
+            spancing: 5
+            TwoLineAvatarListItem:
+                size: '250dp','50dp'
+                size_hint: None,None
+                pos_hint: {'center_y':.5 }
+                text: app.media_playing
+                secondary_text: 'Scholaurenstein'
+                theme_text_color: 'Custom'
+                text_color: app.color_primary
+                secondary_theme_text_color: 'Custom'
+                secondary_text_color: app.color_white_transparent
+                ImageLeftWidget:
+                    source: 'images/music.jpg'
+            BoxLayout:
+                size_hint: None,None
+                pos_hint: {'center_y':.5, }
+                # pos_hint: {'top':.25,'center_x':.45 }
+                size_hint:None,None
+                MusicButton:
+                    icon: 'skip-backward'
+                # MusicButton:
+                #     icon: 'stop'
+                #     on_release: app.music_stop()
+                MusicButton:
+                    icon: app.player_state_icon
+                    on_press:if self.collide_point(*args[0].pos): app.music_pause_play_n_stop()
+                MusicButton:
+                    icon: 'skip-forward'
+            Label:
+                text: app.played
+                color: app.color_primary
+                size_hint: None,None
+                padding: 0,0
+                # pos_hint: {'center_x':.8 }
+            Slider:
+                id: seeker
+                min: 0
+                max: app.play_length
+                color: 0,1,0,1
+                value: 0
+                value_track:True
+                value_track_color:1,0,1,1
+                hint_text_color: app.color_primary
+                size_hint: .5,None
+                on_touch_up:if self.collide_point(*args[1].pos):  app.sound.seek(self.value)        
+            Label:
+                text: app.left_to_play
+                color: app.color_primary
+                size_hint: None,None
+                # pos_hint: {'top':.2,'center_x':.93}
+            MusicButton:
+                icon: 'volume-medium'
+                size_hint: None,None
+            Slider:
+                id: vol
+                min: 0
+                max: 100
+                value: 50
+                color: app.theme_cls.accent_color
+                hint_text_color: app.color_primary
+                size_hint: .2,None
+                # pos_hint: {'center_y':.5,'center_x':.9}
+                on_touch_up: if self.collide_point(*args[1].pos): app.sound.volume = self.value/100
+                value_track: True
+                value_track_color: app.color_primary
+                pos_hint: {'center_y':.5, }
+        MyToolbar:
+            title: app.media_playing
+            left_action_items: [['arrow-left',lambda x : app.music_go_home()]]
+        
+    
 
 <ImageScreen>:
     name: 'picture'
@@ -190,3 +285,21 @@ ScreenManager:
 <MusicButton@MDIconButton>:
     theme_text_color: "Custom"
     text_color: app.color_primary
+    pos_hint: {'center_y':.5 }
+
+
+
+# BoxLayout:
+#     size_hint: None,None
+#     # pos_hint: {'top':.25,'center_x':.45 }
+#     size_hint:None,None
+#     MusicButton:
+#         icon: 'skip-backward'
+#     MusicButton:
+#         icon: 'stop'
+#         on_release: app.music_stop()
+#     MusicButton:
+#         icon: app.player_state_icon
+#         on_press:if self.collide_point(*args[0].pos): app.music_pause_play_n_stop()
+#     MusicButton:
+#         icon: 'skip-forward'
