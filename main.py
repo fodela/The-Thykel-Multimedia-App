@@ -54,7 +54,7 @@ class ThykelPlay(MDApp):
 
     def __init__(self,*args, **kwargs):
         super().__init__()
-        self.icon = '/home/fodela/Prpngoject/Python Projects/Kivy Projects/The-Thykel-Multimedia-App/images/multimedia_icon.'
+        self.icon = '/home/fodela/Project/Python Projects/Kivy Projects/The-Thykel-Multimedia-App/images/multimedia_icon.png'
 
     def build(self):
         self.sm = ScreenManager()
