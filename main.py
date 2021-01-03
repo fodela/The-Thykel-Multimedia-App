@@ -47,6 +47,14 @@ class ThykelPlay(MDApp):
     pic_index = NumericProperty(0)
     image_lst = ListProperty()
     current_img = StringProperty()
+    vid_played = StringProperty('0:00')
+    vid_left_to_play = StringProperty('0:00')
+    vid_player_state = StringProperty('playing')
+    vid_player_state_icon = StringProperty('pause')
+
+    def __init__(self,*args, **kwargs):
+        super().__init__()
+        self.icon = '/home/fodela/Prpngoject/Python Projects/Kivy Projects/The-Thykel-Multimedia-App/images/multimedia_icon.'
 
     def build(self):
         self.sm = ScreenManager()
@@ -81,7 +89,7 @@ class ThykelPlay(MDApp):
     def handle_selection(self,selection):
         self.media_name = selection[0]
         self.media_playing = self.media_name.split('/')[-1]
-        self.prev_dir = '/'.join(self.media_name.split('/')[:-1])
+        # self.prev_dir = '/'.join(self.media_name.split('/')[:-1])
             
     def change_screen(self,screen_name):
         self.sm.current = screen_name
@@ -133,12 +141,15 @@ class ThykelPlay(MDApp):
     def play_video(self):
         self.prev_dir = '/home/fodela/Downloads/Video/'
         self.choose_file()
+        self.left_to_play = str(round(self.sound.length//60))+':'+str(round(self.sound.length%60))
         self.change_screen('video')
+
+        Clock.schedule_interval(self.update_vid_ui,1)
 
     def view_image(self):
         self.prev_dir = '/home/fodela/Downloads/Images/'
         self.choose_file()
-        self.current_img = self.media_name
+        # self.current_img = self.media_name
         self.change_screen('image')
 
     def music_go_home(self):
@@ -149,6 +160,11 @@ class ThykelPlay(MDApp):
         self.music_page.ids.seeker.value = self.sound.get_pos()
         self.played = f"{int(self.sound.get_pos()//60)}:{int(self.sound.get_pos()%60)}"
 
+    def update_vid_ui(self,*args):
+        self.video_page.ids.vid_seeker.value = self.video_page.ids.vid.position
+        self.vid_played = f"{int(self.video_page.ids.vid.position//60)}:{int(self.video_page.ids.vid.position%60)}"
+        self.vid_left_to_play = f"{int(self.video_page.ids.vid.duration//60)}:{int(self.video_page.ids.vid.duration%60)}"
+    
     def get_files(self,dir):
         # fileNames = os.listdir('/home/fodela/Downloads/Images/')
         # for fileName in fileNames:
@@ -171,21 +187,42 @@ class ThykelPlay(MDApp):
             
         except Exception as e:
             print(e)
-    def get_imgs(self):
-        fileNames = os.listdir(self.prev_dir)
-        self.image_lst = [f"{self.prev_dir}/{f} " for f in fileNames]
-        print(len(self.image_lst))
 
-    def next_img(self):
-        try:
-            print(self.current_img)
-            self.get_imgs()
-            if self.pic_index < len(self.image_lst):
-                self.current_img = str(self.image_lst[self.pic_index])
-                self.pic_index +=1
-                print('fired')
-        except Exception as err:
-            print(err)
+    def vid_pause_play_n_stop(self):
+        if self.vid_player_state == 'playing':
+            self.music_page.ids.seeker.value = self.sound.get_pos()
+            self.video_page.ids.vid.state = 'pause'
+            self.vid_player_state_icon = 'play'
+            self.vid_player_state = 'paused'
+             
+        elif self.vid_player_state == 'paused':
+            # self.sound.seek(self.paused_at)
+            self.video_page.ids.vid.state = 'play'
+            self.vid_player_state_icon = 'pause'
+            self.vid_player_state = 'playing'
+
+        # elif self.vid_player_state == 'stoped':
+        #     self.sound.play()
+        #     self.vid_player_state_icon = 'pause'
+        #     self.vid_player_state = 'playing'
+    # def get_imgs(self):
+    #     fileNames = os.listdir(self.prev_dir)
+    #     self.image_lst = [f"{self.prev_dir}/{f} " for f in fileNames]
+    #     print(len(self.image_lst))
+
+    # def next_img(self):
+        # try:
+        #     print(self.current_img)
+        #     self.get_imgs()
+        #     if self.pic_index < len(self.image_lst):
+        #         self.current_img = str(self.image_lst[self.pic_index])
+        #         self.pic_index +=1
+        #         print('fired')
+        # except Exception as err:
+        #     print(err)
+
+    def seek_video(self):
+        self.video_page.ids.vid.seek((self.video_page.ids.vid_seeker.value/self.video_page.ids.vid.duration))
         
 if __name__ == "__main__":
     ThykelPlay().run()
